@@ -6,13 +6,29 @@ const port = 3000;
 
 
 app.get("/", function(req, res){
-    res.send("hi");
-    console.log("get");
+    res.render("home.ejs");
+});
+
+app.get("/users/:username",(req, res)=>{
+    let posts = [
+        {
+            name: "sofi",
+            post: "nice!"
+        },
+        {
+            name: "john",
+            post: "nice dog",
+        },
+        {
+            name: "jill",
+            post: "we missed you"
+        }
+    ]
+    res.render("user.ejs",{username:req.params.username, posts:posts});
 });
 
 app.get("/bye", (req,res)=>{
     res.send("bye");
-    console.log("get bye");
 });
 
 app.get("/users",(req, res)=>{

@@ -9,6 +9,9 @@
   "author": "alaa ak",
   "license": "ISC",
   "dependencies": {
+    "ejs": "^2.6.1",
     "express": "^4.16.3"
+  },
+  "devDependencies": {
   }
 }
