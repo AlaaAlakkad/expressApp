@@ -1,12 +1,14 @@
 const express = require ("express");
 
 const app = express();
+
 const port = 3000;
 
-
+app.use(express.static("public"));
+app.set("view engine","ejs");
 
 app.get("/", function(req, res){
-    res.render("home.ejs");
+    res.render("home");
 });
 
 app.get("/users/:username",(req, res)=>{
@@ -24,7 +26,7 @@ app.get("/users/:username",(req, res)=>{
             post: "we missed you"
         }
     ]
-    res.render("user.ejs",{username:req.params.username, posts:posts});
+    res.render("user",{username:req.params.username, posts:posts});
 });
 
 app.get("/bye", (req,res)=>{
