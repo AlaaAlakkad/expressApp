@@ -9,7 +9,11 @@ const port = 3000;
 let campgrounds = [
     {name: "Hosea", image:"http://lablogbeaute.co.uk/wp-content/uploads/2016/07/camping.jpg"},
     {name: "Dameon", image:"https://s3-us-west-2.amazonaws.com/hispotion-prod/wp-content/uploads/2017/05/31-05101657f53d1a399b7051016886742565-31.jpg"},
+    {name: "Maurine Hodkiewicz II", image:"https://www.nationalparks.nsw.gov.au/~/media/20E7E1F7667F42EEA33795B18189210E.ashx"},
+    {name: "Hosea", image:"http://lablogbeaute.co.uk/wp-content/uploads/2016/07/camping.jpg"},
+    {name: "Dameon", image:"https://s3-us-west-2.amazonaws.com/hispotion-prod/wp-content/uploads/2017/05/31-05101657f53d1a399b7051016886742565-31.jpg"},
     {name: "Maurine Hodkiewicz II", image:"https://www.nationalparks.nsw.gov.au/~/media/20E7E1F7667F42EEA33795B18189210E.ashx"}
+
 ];
 
 app.set("view engine", "ejs");
