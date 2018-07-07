@@ -20,14 +20,16 @@ mongoose.connect('mongodb://localhost/yelp_camp').then(
 
 const CampgroundSchema = new mongoose.Schema({
     name: String,
-    image: String
+    image: String,
+    description: String
 });
 
-const Campground = mongoose.model("Campgound", CampgroundSchema);
+const Campground = mongoose.model("Campground", CampgroundSchema);
 
 /* Campground.create({
     name: "Hosea", 
-    image:"http://lablogbeaute.co.uk/wp-content/uploads/2016/07/camping.jpg"
+    image:"http://lablogbeaute.co.uk/wp-content/uploads/2016/07/camping.jpg",
+    description: "beautiful place"
 }, (err, campground)=>{
     if(err) return console.log(err);
     console.log("created successfully", campground);
@@ -49,27 +51,26 @@ app.get("/", (req, res) =>{
     res.render("landing");
 });
 
+//INDEX
 app.get("/campgrounds", (req, res)=>{
     // query database 
     Campground.find({},(err, camps)=>{
         if(err) {
             res.send("something went wrong sorry") 
         }else{
-            res.render("campgrounds",{campgrounds: camps});
+            res.render("index",{campgrounds: camps});
         }
     })
 });
 
-app.get("/campgrounds/new", (req, res)=>{
-    res.render("new");
-})
-
+// CREATE
 app.post("/campgrounds", (req, res)=>{
     // get data from request body
     let body = req.body;
     let campground = {
         name: body.name,
-        image: body.image
+        image: body.image,
+        description: body.description
     };
     // add it to database 
     Campground.create(campground, (err, created)=>{
@@ -80,5 +81,21 @@ app.post("/campgrounds", (req, res)=>{
         }
     });
 });
+
+// NEW
+app.get("/campgrounds/new", (req, res)=>{
+    res.render("new");
+});
+
+//SHOW
+app.get("/campgrounds/:id",(req, res)=>{
+    // get the id and find query db
+    Campground.findById(req.params.id, (err, foundCamp)=>{
+        if(err) res.send("oops! something went wrong!");
+        res.render("show",{campground: foundCamp});
+    })
+})
+
+
 
 app.listen(port, ()=> console.log("server started"));
