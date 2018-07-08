@@ -4,11 +4,13 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
 const Campground = require("./models/campground");
+const Comment = require("./models/comment");
 const seedDB = require("./seeds");
 const port = 3000;
 
 // setup
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.static(__dirname + "/public"));
 
 
 app.set("view engine", "ejs");
@@ -36,7 +38,7 @@ app.get("/campgrounds", (req, res)=>{
         if(err) {
             res.send("something went wrong sorry") 
         }else{
-            res.render("index",{campgrounds: camps});
+            res.render("campgrounds/index",{campgrounds: camps});
         }
     })
 });
@@ -62,7 +64,7 @@ app.post("/campgrounds", (req, res)=>{
 
 // NEW
 app.get("/campgrounds/new", (req, res)=>{
-    res.render("new");
+    res.render("campgrounds/new");
 });
 
 //SHOW
@@ -73,10 +75,43 @@ app.get("/campgrounds/:id",(req, res)=>{
             res.send("oops! something went wrong!");
             return;
         }
-        res.render("show",{campground: foundCamp});
+        res.render("campgrounds/show",{campground: foundCamp});
     })
 })
 
+
+//================
+// COMMENTS ROUTES
+//===============
+
+app.get("/campgrounds/:id/comments/new", (req, res)=>{
+    // find campground by id
+    Campground.findById(req.params.id, (err, camp)=>{
+        if(err){
+            console.log(err);
+            return;
+        }
+        res.render("comments/new",{campground: camp});
+    });
+});
+
+app.post("/campgrounds/:id/comments", (req, res)=>{
+    Campground.findById(req.params.id, (err, campground)=>{
+        if(err){
+            console.log(err);
+            res.redirect("/campgrounds");
+        }
+        Comment.create(req.body.comment, (err, comment)=>{
+            if(err){
+                return console.log("something went wrong " + err);
+            }
+
+            campground.comments.push(comment._id);
+            campground.save();
+            res.redirect("/campgrounds/" + campground._id);
+        });
+    });
+});
 
 
 app.listen(port, ()=> console.log("server started"));
