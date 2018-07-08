@@ -6,6 +6,12 @@
 
 <img src="<%=campground.image%>" width="200px" height="200px">
 
-<h2><%=campground.description%></h2>
+<p><%=campground.description%></p>
+
+<%campground.comments.forEach((comment)=>{ %>
+    <p>
+        <strong><%=comment.author%></strong> - <%= comment.text %>
+    </p>
+<%})%>
 
 <% include partials/footer %>
