@@ -20,10 +20,12 @@
                 <h5 class="card-title" style="float: right;"><strong>$9.00/night</strong></h5>
                 <p class="card-text pt-4 text-left"><%=campground.description%></p>
                 <p><small><em>Submitted By <%=campground.author.username%></em></small></p>
-                <a class="btn btn-warning btn-sm" href="/campgrounds/<%=campground._id%>/edit">Edit</a>
-                <form id="deleteForm" action="/campgrounds/<%=campground._id%>?_method=DELETE" method="POST">
-                    <button class="btn btn-danger btn-sm">Delete</button>
-                </form>
+                <% if(currentUser && campground.author.id.equals(currentUser._id)) { %>
+                    <a class="btn btn-warning btn-sm" href="/campgrounds/<%=campground._id%>/edit">Edit</a>
+                    <form id="deleteForm" action="/campgrounds/<%=campground._id%>?_method=DELETE" method="POST">
+                        <button class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                <% } %>
                 </div>
             </div>
 
