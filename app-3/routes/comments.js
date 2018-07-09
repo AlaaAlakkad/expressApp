@@ -1,10 +1,12 @@
 const express = require("express");
 const router = express.Router({mergeParams:true});
+
 const Campground = require("../models/campground");
 const Comment = require("../models/comment");
+const middelware = require("../middleware");
 
 // comments new 
-router.get("/new", isLoggedIn,(req, res)=>{
+router.get("/new", middelware.isLoggedIn,(req, res)=>{
     // find campground by id
     Campground.findById(req.params.id, (err, camp)=>{
         if(err){
@@ -16,7 +18,7 @@ router.get("/new", isLoggedIn,(req, res)=>{
 });
 
 // comments create
-router.post("/",isLoggedIn ,(req, res)=>{
+router.post("/", middelware.isLoggedIn ,(req, res)=>{
     Campground.findById(req.params.id, (err, campground)=>{
         if(err){
             console.log(err);
@@ -38,7 +40,7 @@ router.post("/",isLoggedIn ,(req, res)=>{
 });
 
 // comment edit
-router.get("/:comment_id/edit", checkCommentsOwnership, (req, res)=>{
+router.get("/:comment_id/edit", middelware.checkCommentsOwnership, (req, res)=>{
     Comment.findById(req.params.comment_id, (err, comment)=>{
         if(err) return res.redirect("back");
         res.render("comments/edit", {campground_id: req.params.id, comment: comment});
@@ -46,7 +48,7 @@ router.get("/:comment_id/edit", checkCommentsOwnership, (req, res)=>{
 });
 
 // comment update
-router.put("/:comment_id", checkCommentsOwnership, (req, res)=>{
+router.put("/:comment_id", middelware.checkCommentsOwnership, (req, res)=>{
 
     Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, (err, updatedComment)=>{
         if(err) return res.redirect("back");
@@ -55,14 +57,14 @@ router.put("/:comment_id", checkCommentsOwnership, (req, res)=>{
 });
 
 // comment delete
-router.delete("/:comment_id", checkCommentsOwnership, (req, res)=>{
+router.delete("/:comment_id", middelware.checkCommentsOwnership, (req, res)=>{
     Comment.findByIdAndRemove(req.params.comment_id, (err, comment)=>{
         if(err) return redirect("back");
         res.redirect("/campgrounds/" + req.params.id);
     });
 });
 
-function isLoggedIn(req, res, next){
+/* function isLoggedIn(req, res, next){
     if(req.isAuthenticated()) return next();
     res.redirect("/login")
 }
@@ -82,6 +84,6 @@ function checkCommentsOwnership(req, res, next){
     }else{
         res.redirect("back");
     }
-}
+} */
 
 module.exports = router;

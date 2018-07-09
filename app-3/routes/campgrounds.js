@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
+
 const Campground = require("../models/campground");
+const middelware = require("../middleware");
 
 
 //INDEX
@@ -17,7 +19,7 @@ router.get("/", (req, res)=>{
 });
 
 // CREATE
-router.post("/", isLoggedIn, (req, res)=>{
+router.post("/", middelware.isLoggedIn, (req, res)=>{
     // get data from request body
     let body = req.body;
     let author = {
@@ -43,7 +45,7 @@ router.post("/", isLoggedIn, (req, res)=>{
 });
 
 // NEW
-router.get("/new", isLoggedIn, (req, res)=>{
+router.get("/new", middelware.isLoggedIn, (req, res)=>{
     res.render("campgrounds/new");
 });
 
@@ -61,7 +63,7 @@ router.get("/:id",(req, res)=>{
 
 // EDIT
 
-router.get("/:id/edit", checkCampgroundOwnership, (req, res)=>{
+router.get("/:id/edit", middelware.checkCampgroundOwnership, (req, res)=>{
         Campground.findById(req.params.id, (err, camp)=>{
             res.render("campgrounds/edit", {campground: camp});
         });
@@ -70,7 +72,7 @@ router.get("/:id/edit", checkCampgroundOwnership, (req, res)=>{
 
 // UPDATE
 
-router.put("/:id", checkCampgroundOwnership, (req, res)=>{
+router.put("/:id", middelware.checkCampgroundOwnership, (req, res)=>{
 
     Campground.findByIdAndUpdate(req.params.id, req.body.campground, (err, updatedCamp)=>{
         if(err)
@@ -84,7 +86,7 @@ router.put("/:id", checkCampgroundOwnership, (req, res)=>{
 
 
 // DELETE
-router.delete("/:id", checkCampgroundOwnership, (req, res)=>{
+router.delete("/:id", middelware.checkCampgroundOwnership, (req, res)=>{
     Campground.findByIdAndRemove(req.params.id, (err)=>{
         if(err)
         return res.redirect("/campgrounds");
@@ -93,7 +95,7 @@ router.delete("/:id", checkCampgroundOwnership, (req, res)=>{
 });
 
 
-function isLoggedIn(req, res, next){
+/* function isLoggedIn(req, res, next){
     if(req.isAuthenticated()) return next();
     res.redirect("/login")
 }
@@ -113,7 +115,7 @@ function checkCampgroundOwnership(req, res, next){
     }else{
         res.redirect("back");
     }
-}
+} */
 
 module.exports = router;
 
