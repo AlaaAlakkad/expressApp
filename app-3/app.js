@@ -6,8 +6,6 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 
 
-//const Campground = require("./models/campground");
-//const Comment = require("./models/comment");
 const User = require("./models/user");
 const seedDB = require("./seeds");
 
@@ -33,7 +31,7 @@ mongoose.connect('mongodb://localhost/yelp_camp').then(
     (err)=>console.log(err)
 );
 
-seedDB();
+// seedDB();
 
 // PASSPORT CONFIG
 
@@ -58,8 +56,5 @@ app.use((req, res, next)=>{
 app.use("/campgrounds", campgroundRoutes);
 app.use("/campgrounds/:id/comments", commentRoutes);
 app.use("/", indexRoutes);
-
-
-
 
 app.listen(port, ()=> console.log("server started"));
