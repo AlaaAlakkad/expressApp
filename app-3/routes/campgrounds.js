@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Campground = require("../models/campground");
 
+
 //INDEX
 router.get("/", (req, res)=>{
 
@@ -46,7 +47,7 @@ router.get("/new", isLoggedIn, (req, res)=>{
     res.render("campgrounds/new");
 });
 
-//SHOW
+// SHOW
 router.get("/:id",(req, res)=>{
     // get the id and find query db
     Campground.findById(req.params.id).populate("comments").exec( (err, foundCamp)=>{
@@ -57,6 +58,42 @@ router.get("/:id",(req, res)=>{
         res.render("campgrounds/show",{campground: foundCamp});
     });
 });
+
+// EDIT
+
+router.get("/:id/edit", (req, res)=>{
+    Campground.findById(req.params.id, (err, camp)=>{
+        if(err)
+        return redirect("/campgrounds");
+
+        res.render("campgrounds/edit", {campground: camp});
+    });
+});
+
+// UPDATE
+
+router.put("/:id", (req, res)=>{
+
+    Campground.findByIdAndUpdate(req.params.id, req.body.campground, (err, updatedCamp)=>{
+        if(err)
+        return res.redirect("/campgrounds");
+
+        console.log(updatedCamp);
+        res.redirect("/campgrounds/" + req.params.id);
+
+    } );
+});
+
+
+// DELETE
+router.delete("/:id", (req, res)=>{
+    Campground.findByIdAndRemove(req.params.id, (err)=>{
+        if(err)
+        return res.redirect("/campgrounds");
+        res.redirect("/campgrounds");
+    });
+});
+
 
 function isLoggedIn(req, res, next){
     if(req.isAuthenticated()) return next();

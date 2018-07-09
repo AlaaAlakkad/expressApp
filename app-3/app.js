@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
+const methodOverride = require("method-override");
 
 
 const User = require("./models/user");
@@ -18,9 +19,11 @@ const port = 3000;
 // setup
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + "/public"));
-
-
 app.set("view engine", "ejs");
+
+app.use(methodOverride("_method"));
+
+
 
 
 
