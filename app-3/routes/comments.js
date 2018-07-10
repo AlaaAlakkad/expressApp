@@ -26,6 +26,7 @@ router.post("/", middelware.isLoggedIn ,(req, res)=>{
         }
         Comment.create(req.body.comment, (err, comment)=>{
             if(err){
+                req.flash("error", "something went wrong");
                 return console.log("something went wrong " + err);
             }
             // add username and id to the comment 
@@ -34,6 +35,7 @@ router.post("/", middelware.isLoggedIn ,(req, res)=>{
             comment.save();
             campground.comments.push(comment._id);
             campground.save();
+            req.flash("success", "Successfully added comment");
             res.redirect("/campgrounds/" + campground._id);
         });
     });
@@ -60,6 +62,7 @@ router.put("/:comment_id", middelware.checkCommentsOwnership, (req, res)=>{
 router.delete("/:comment_id", middelware.checkCommentsOwnership, (req, res)=>{
     Comment.findByIdAndRemove(req.params.comment_id, (err, comment)=>{
         if(err) return redirect("back");
+        req.flash("success", "Comment deleted");
         res.redirect("/campgrounds/" + req.params.id);
     });
 });

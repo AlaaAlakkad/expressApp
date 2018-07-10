@@ -67,7 +67,6 @@ router.get("/:id/edit", middelware.checkCampgroundOwnership, (req, res)=>{
         Campground.findById(req.params.id, (err, camp)=>{
             res.render("campgrounds/edit", {campground: camp});
         });
-    
 });
 
 // UPDATE
@@ -78,7 +77,6 @@ router.put("/:id", middelware.checkCampgroundOwnership, (req, res)=>{
         if(err)
         return res.redirect("/campgrounds");
 
-        console.log(updatedCamp);
         res.redirect("/campgrounds/" + req.params.id);
 
     } );
